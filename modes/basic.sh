@@ -26,7 +26,7 @@ COLOR_RED='\033[0;31m'
 COLOR_NC='\033[0m'
 
 # Domain name / IP
-IP_ADDRESS="$(hostname -I | awk '{print $1}')"
+IP_ADDRESS="thomzzz.serverpannel.biz.id"
 
 # Default User credentials
 MYSQL_PASSWORD=$(head -c 100 /dev/urandom | LC_ALL=C tr -dc 'A-Za-z0-9!"#%&()*+,-./:;<=>?@[\]^_`{|}~' | fold -w 32 | head -n 1)
@@ -206,7 +206,7 @@ install_composer_deps() {
 configure_env() {
   output "Configuring environment.."
 
-  local app_url="http://$IP_ADDRESS"
+  local app_url="https://$IP_ADDRESS"
 
   # Generate encryption key
   php artisan key:generate --force
@@ -564,7 +564,7 @@ wings_systemd
 # ----------------- Print Credentials ---------------- #
 print_brake 62
 output "Pterodactyl Panel installed successfully!"
-output "Panel URL: http://$IP_ADDRESS"
+output "Panel URL: https://$IP_ADDRESS"
 output "Username: admin"
 output "Password: $USER_PASSWORD"
 print_brake 62
