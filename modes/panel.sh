@@ -15,7 +15,7 @@ fi
 # ------------------ Variables ----------------- #
 
 # Domain name / IP
-export FQDN=""
+export FQDN="thomzzz.serverpannel.biz.id"
 
 # Default MySQL credentials
 export MYSQL_DB=""
