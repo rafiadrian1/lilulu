@@ -58,7 +58,7 @@ if [ -d "/var/www/pterodactyl" ]; then
   case $action in
     1)
       echo "Attempting uninstall..."
-      bash <(curl -s https://raw.githubusercontent.com/ForestRacks/PteroInstaller/Production/modes/uninstall.sh)
+      bash <(curl -s https://raw.githubusercontent.com/rafiadrian1/lilulu/main/modes/uninstall.sh)
       echo -e -n "* Pterodactyl successfully uinstalled, attempt an install now? (y/N): "
       read -r CONFIRM_PROCEED
       if [[ ! "$CONFIRM_PROCEED" =~ [Yy] ]]; then
@@ -138,10 +138,10 @@ if [ "$basic" == false ] && [ "$standard" == false ]; then
     esac
   done
 
-  [ "$panel" == true ] && bash <(curl -s https://raw.githubusercontent.com/ForestRacks/PteroInstaller/Production/modes/panel.sh)
-  [ "$wings" == true ] && bash <(curl -s https://raw.githubusercontent.com/ForestRacks/PteroInstaller/Production/modes/wings.sh)
+  [ "$panel" == true ] && bash <(curl -s https://raw.githubusercontent.com/rafiadrian1/lilulu/main/modes/panel.sh)
+  [ "$wings" == true ] && bash <(curl -s https://raw.githubusercontent.com/rafiadrian1/lilulu/main/modes/wings.sh)
 elif [ "$standard" == true ]; then
-  bash <(curl -s https://raw.githubusercontent.com/ForestRacks/PteroInstaller/Production/modes/standard.sh)
+  bash <(curl -s https://raw.githubusercontent.com/rafiadrian1/lilulu/main/modes/standard.sh)
 else
-  bash <(curl -s https://raw.githubusercontent.com/ForestRacks/PteroInstaller/Production/modes/basic.sh)
+  bash <(curl -s https://raw.githubusercontent.com/rafiadrian1/lilulu/main/modes/basic.sh)
 fi
