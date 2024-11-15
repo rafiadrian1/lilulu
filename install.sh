@@ -96,7 +96,7 @@ output
 
 while [ "$basic" == false ] && [ "$standard" == false ] && [ "$advanced" == false ]; do
   output "What installation mode would you like to use?"
-  output "[1] Basic Installer - Install the panel and wings on your IP with very few prompts."
+  output "[1] thomz Basic Installer - Install the panel and wings on your IP with very few prompts."
   # output "[2] Standard installer - Install the panel and wings with prompts for an FQDN and SSL."
   # output "[3] Advanced installer - Install either the panel or wings with options like mail configuration"
 
