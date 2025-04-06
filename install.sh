@@ -1,147 +1,135 @@
 #!/bin/bash
 
-set -e
+# Color
+BLUE='\033[0;34m'       
+RED='\033[0;31m'
+GREEN='\033[0;32m'
+YELLOW='\033[0;33m'
+NC='\033[0m'
 
-# Pterodactyl Installer 
-# Copyright Forestracks 2022-2024
-
-output() {
-  echo "* ${1}"
+# Display welcome message
+display_welcome() {
+  echo -e ""
+  echo -e "${RED} =============================================== ${NC}"
+  echo -e "${RED}                                                 ${NC}"
+  echo -e "${RED}                AUTO INSTALLER PANEL             ${NC}"
+  echo -e "${RED}                  MUDAH BY THOMZ                 ${NC}"
+  echo -e "${RED}                                                 ${NC}"
+  echo -e "${RED} =============================================== ${NC}"
+  echo -e ""
+  echo -e ""
+  sleep 4
 }
 
-error() {
-  COLOR_RED='\033[0;31m'
-  COLOR_NC='\033[0m'
+#Check user token
+check_token() {
+  echo -e "                                                       "
+  echo -e "${RED} =============================================== ${NC}"
+  echo -e "${RED}              CEK TOKEN AUTO INSTAL              ${NC}"
+  echo -e "${RED}                  DI SALURANNYA                  ${NC}"
+  echo -e "${RED}                      THOMZ                      ${NC}"
+  echo -e "${RED} =============================================== ${NC}"
+  echo -e "                                                       "
 
-  echo ""
-  echo -e "* ${COLOR_RED}ERROR${COLOR_NC}: $1"
-  echo ""
-}
+  echo -e "${RED}TOKEN :${NC}"
+  read -r USER_TOKEN
 
-# Exit with error status code if user is not root
-if [[ $EUID -ne 0 ]]; then
-  error "This script must be executed with root privileges (sudo)." 1>&2
-  exit 1
-fi
-
-# Check for curl
-if ! [ -x "$(command -v curl)" ]; then
-  echo "* Installing dependencies."
-  # Rockey / Alma
-  if [ -n "$(command -v yum)" ]; then
-    yum update -y >> /dev/null 2>&1
-    yum -y install curl >> /dev/null 2>&1
-  fi
-  # Debian / Ubuntu
-  if [ -n "$(command -v apt-get)" ]; then
-    DEBIAN_FRONTEND=noninteractive apt update -y >> /dev/null 2>&1
-    DEBIAN_FRONTEND=noninteractive apt install -y --no-install-recommends snapd cron curl wget gzip jq >> /dev/null 2>&1
-  fi
-  # Check if curl is installed
-  if ! [ -x "$(command -v curl)" ]; then
-    echo "* curl is required in order for this script to work."
-    echo "* install using apt (Debian and derivatives) or yum/dnf (CentOS)"
+  if [ "$USER_TOKEN" = "thomzganteng" ]; then
+    echo -e "${GREEN}WOKEH COMPLETE${NC}}"
+  else
+    echo -e "${GREEN}GAGAL COBA LAGI${NC}"
     exit 1
   fi
-fi
+  clear
+}
 
-# Check for existing installation
-if [ -d "/var/www/pterodactyl" ]; then
-  error "The script has detected that you already have Pterodactyl panel on your system!"
-  output "[1] Uninstall Pterodactyl - Attmpet automated Pterodactyl uninstallation."
-  output "[2] Continue Anyway - Ignore warnings and attempt to install Pterodactyl anyway."
-  output "[3] Exit Installer - Cancel installation process."
 
-  echo -n "* Input 1-3: "
-  read -r action
-
-  case $action in
-    1)
-      echo "Attempting uninstall..."
-      bash <(curl -s https://raw.githubusercontent.com/rafiadrian1/lilulu/main/modes/uninstall.sh)
-      echo -e -n "* Pterodactyl successfully uinstalled, attempt an install now? (y/N): "
-      read -r CONFIRM_PROCEED
-      if [[ ! "$CONFIRM_PROCEED" =~ [Yy] ]]; then
-        print_error "Installation aborted!"
-        exit 1
-      fi
-      ;;
-    2)
-      echo "Attempting to proceed anyway..."
-      ;;
-    3)
-      echo "Exiting installer..."
-      exit 1
-      ;;
-    *)
-      echo "Invalid option. Please input a number between 1 and 3."
-      ;;
-  esac
-fi
-
-# Start install process
-basic=false
-standard=false
-advanced=false
-
-panel=false
-wings=false
-
-output "Pterodactyl installation script"
-output "This script is not associated with the official Pterodactyl Project. PteroInstaller comes with ABSOLUTELY NO WARRANTY, to the extent permitted by applicable law."
-output
-output "DISCLAIMER: This installer may not work as intended on all environments."
-
-output
-
-while [ "$basic" == false ] && [ "$standard" == false ] && [ "$advanced" == false ]; do
-  output "What installation mode would you like to use?"
-  output "[1] thomz Basic Installer - Install the panel and wings on your IP with very few prompts."
-  # output "[2] Standard installer - Install the panel and wings with prompts for an FQDN and SSL."
-  # output "[3] Advanced installer - Install either the panel or wings with options like mail configuration"
-
-  echo -n "* Input 1-3: "
-  read -r action
-
-  case $action in
-    1 )
-      basic=true ;;
-    2 )
-      standard=true ;;
-    3 )
-      advanced=true ;;
-    * )
-      error "Invalid option" ;;
-  esac
-done
-
-if [ "$basic" == false ] && [ "$standard" == false ]; then
-  while [ "$panel" == false ] && [ "$wings" == false ]; do
-    output "What would you like to do?"
-    output "[1] Install the panel (Web Dashboard)"
-    output "[2] Install the wings (Machine Daemon)"
-    output "[3] Install both on the same machine"
-
-    echo -n "* Input 1-3: "
-    read -r action
-
-    case $action in
-      1 )
-        panel=true ;;
-      2 )
-        wings=true ;;
-      3 )
-        panel=true
-        wings=true ;;
-      * )
-        error "Invalid option" ;;
+# Install theme
+install_theme() {
+  while true; do
+    echo -e "                                                       "
+    echo -e "${RED} =============================================== ${NC}"
+    echo -e "${RED}            APAKAH INGIN MELANJUTKAN             ${NC}"
+    echo -e "${RED} =============================================== ${NC}"
+    echo -e "                                                       "
+    echo -e "Ingin melanjutkan ke proses penginstalan? (y/n)"
+    read -r INSTAL_THOMZ
+    case "$INSTAL_THOMZ" in
+      y) 
+     echo -e "                                                       "
+  echo -e "${RED} =============================================== ${NC}"
+  echo -e "${RED}              MASUKAN SUBDOMAIN KAMU             ${NC}"
+  echo -e "${RED}             (panel.thomvelz.tamvan)             ${NC}"
+  echo -e "${RED}                    ©Thomvelz                    ${NC}"
+  echo -e "${RED} =============================================== ${NC}"
+read Domain
+bash <(curl -s https://raw.githubusercontent.com/rafiadrian1/kuliah/main/autoinstall.sh)  $Domain true admin@gmail.com thomz ganteng admin thomz true
+  echo -e "                                                       "
+  echo -e "${GREEN} =============================================== ${NC}"
+  echo -e "${GREEN}                   INSTALL SUCCESS               ${NC}"
+  echo -e "${GREEN} =============================================== ${NC}"
+  echo -e ""
+  sleep 2
+    break
+        ;;
+      Y) 
+     echo -e "                                                       "
+  echo -e "${RED} =============================================== ${NC}"
+  echo -e "${RED}              MASUKAN SUBDOMAIN KAMU             ${NC}"
+  echo -e "${RED}             (panel.thomvelz.tamvan)             ${NC}"
+  echo -e "${RED}                    ©Thomvelz                    ${NC}"
+  echo -e "${RED} =============================================== ${NC}"
+    read Domain
+    
+  echo -e "                                                       "
+  echo -e "${GREEN} =============================================== ${NC}"
+  echo -e "${GREEN}                   INSTALL SUCCESS               ${NC}"
+  echo -e "${GREEN} =============================================== ${NC}"
+  echo -e ""
+  sleep 2
+    break
+        ;;
+      n)
+        return
+        ;;
+      *)
+        echo -e "${RED}Pilihan tidak valid, silahkan coba lagi.${NC}"
+        ;;
     esac
   done
+  }
 
-  [ "$panel" == true ] && bash <(curl -s https://raw.githubusercontent.com/rafiadrian1/lilulu/main/modes/panel.sh)
-  [ "$wings" == true ] && bash <(curl -s https://raw.githubusercontent.com/rafiadrian1/lilulu/main/modes/wings.sh)
-elif [ "$standard" == true ]; then
-  bash <(curl -s https://raw.githubusercontent.com/rafiadrian1/lilulu/main/modes/standard.sh)
-else
-  bash <(curl -s https://raw.githubusercontent.com/rafiadrian1/lilulu/main/modes/basic.sh)
-fi
+# Main script
+display_welcome
+check_token
+
+while true; do
+  clear
+  echo -e "                                                       "
+  echo -e "${RED} =============================================== ${NC}"
+  echo -e "${RED}                   SELECT OPTION                 ${NC}"
+  echo -e "${RED} =============================================== ${NC}"
+  echo -e "                                                       "
+  echo -e "SELECT OPTION :"
+  echo "1. Install panel"
+  echo "x. Exit"
+  echo -e "Masukkan pilihan (1/x):"
+  read -r MENU_CHOICE
+  clear
+
+  case "$MENU_CHOICE" in
+    1)
+      install_theme
+      ;;
+    2)
+      uninstall_theme
+      ;;
+    x)
+      echo "Keluar dari skrip."
+      exit 0
+      ;;
+    *)
+      echo "Pilihan tidak valid, silahkan coba lagi."
+      ;;
+  esac
+done
